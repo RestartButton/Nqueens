@@ -1,8 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <cstdlib>
-#include <ctime>
 #include <algorithm>
+#include <time.h>
 
 int n = 8;          
 int p = 500;        
@@ -79,27 +78,17 @@ Generation crossover(Generation& generationList) {
     return newGenerationList;
 }
 
-bool findChrome(int val, std::vector<int> muted_list) {
-    for(size_t i = 0; i < muted_list.size(); i++){
-        if(muted_list[i] == val){
-            return true;
-        }
-    }
-    return false;
-}
-
 Generation mutation(Generation& generationList) {
     std::vector<int> mutedList;
     int i = 0;
     
     while (i < generationList.size() / 2) {
-        int newRand = rand() % (generationList.size() / 2) + generationList.size() / 2;
+        int newRand = (rand() % (generationList.size() / 2)) + generationList.size() / 2;
         if (std::find(mutedList.begin(), mutedList.end(), newRand) == mutedList.end()) {
             mutedList.push_back(newRand);
             int randomIndex = rand() % n;
             generationList[newRand][randomIndex] = (rand() % (n - 1)) + 1;
             i++;
-            //std::cout << i << std::endl;
         }
     }
     return generationList;
@@ -115,8 +104,6 @@ void showTable(Chromosome res) {
 }
 
 int main() {
-    
-
     std::cout << "Qual o tamanho do tabuleiro desejado? (minimo 4)" << std::endl;
     std::cin >> n;
 
@@ -140,7 +127,7 @@ int main() {
         maxGenerations = 0;
     }
 
-    srand(time(0));  // Initialize random seed
+    srand(time(0));
 
     currentGeneration = randomGeneration(p, n);
     currentGeneration = fitness(currentGeneration);
@@ -149,7 +136,7 @@ int main() {
     bool max_declared = true;
     while (true && max_declared) {
         std::cout << "-------------------------------------------------------\n";
-        std::cout << "Epoch " << epoch << "\n";
+        std::cout << "Geracao " << epoch << "\n";
 
         currentGeneration.resize(p / 2);
         newGeneration = crossover(currentGeneration);
@@ -160,7 +147,7 @@ int main() {
 
         if (currentGeneration[0][n] == 0) {
 
-            std::cout << "Solution Found: ";
+            std::cout << "Solucao Encontrada: ";
             for (int i = 0; i < n; ++i) {
                 std::cout << currentGeneration[0][i] << " ";
             }
@@ -168,7 +155,7 @@ int main() {
             showTable(currentGeneration[0]);
             break;
         } else {
-            std::cout << "Best Solution: ";
+            std::cout << "Melhor Solucao: ";
             for (int i = 0; i < n; ++i) {
                 std::cout << currentGeneration[0][i] << " ";
             }
